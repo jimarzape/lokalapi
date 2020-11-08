@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\ProductModel;
 use App\Model\StockModel;
+use App\Model\ItemRating;
+use App\Model\Cart;
+use App\User;
 
 class ItemController extends Controller
 {
@@ -81,6 +84,56 @@ class ItemController extends Controller
         catch(\Exception $e)
         {
             return response()->json(array('message' => $e->getMessage()), 500);
+        }
+    }
+
+    public function rate(Request $request)
+    {
+        // ItemRating
+        // Cart
+        $user = User::where('userToken', $request->user_token)->first();
+        if(is_null($user))
+        {
+            return 'ERROR';
+        }
+        else
+        {
+            $product = ProductModel::where('product_identifier', $request->product_identifier)->first();
+            if(is_null($product))
+            {
+                return 'ERROR';
+            }
+            else
+            {
+                $exists = ItemRating::where('cart_id', $request->cart_id)->exists();
+
+                if($exists)
+                {
+                    return 'ERROR : ALREADY RATED';
+                }
+                else
+                {
+                    $rate                       = new ItemRating;
+                    $rate->user_token           = $request->user_token;
+                    $rate->product_identifier   = $request->product_identifier;
+                    $rate->rating               = $request->rating;
+                    $rate->comment              = $request->comment;
+                    $rate->product_id           = $product->product_id;
+                    $rate->user_id              = $user->userId;
+                    $rate->cart_id              = $request->cart_id;
+                    $rate->rating_date          = date('Y-m-d H:i:s');
+                    $rate->save();
+
+                    $cart                       = new Cart;
+                    $cart->exists               = true;
+                    $cart->cart_id              = $request->cart_id;
+                    $cart->delivery_status      = 8; //means reviewed
+                    $cart->save();
+
+                    return 'SUCCESS';
+                }   
+                
+            }
         }
     }
 }

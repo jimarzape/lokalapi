@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cart extends Model
 {
     protected $table    = 'cart';
-    public $timestamps  = false;
+    public $timestamps  = true;
     public $primaryKey  = 'cart_id';
 
 

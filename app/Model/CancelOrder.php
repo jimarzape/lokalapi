@@ -4,9 +4,9 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StockModel extends Model
+class CancelOrder extends Model
 {
-    protected $table    = 'stocks';
+    protected $table    = 'cancellation';
     public $timestamps  = true;
     public $primaryKey  = 'id';
 }

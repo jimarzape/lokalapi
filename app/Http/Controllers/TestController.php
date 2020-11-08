@@ -8,7 +8,7 @@ use App\User;
 
 class TestController extends Controller
 {
-    public function index()
+    public function index2()
     {
     	$_user = User::select('*',DB::raw('AES_DECRYPT(userPassword,userToken) as decrypted_pass'))->where('password','')->get();
         // dd($_user);
@@ -28,8 +28,9 @@ class TestController extends Controller
     	}
     }
 
-    public function index2()
+    public function index()
     {
-    	dd(md5(1));
+    	// dd(md5(1));
+        return order_number();
     }
 }

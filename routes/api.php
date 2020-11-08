@@ -30,6 +30,8 @@ Route::group(['namespace' => 'Api'], function(){
 	Route::get('item/new-arrivals','ItemController@new_arrivals');
 	Route::get('item/random-list','ItemController@list_random');
 	Route::post('item/variant','ItemController@variant');
+
+	Route::post('order/rate','ItemController@rate');
 	
 	Route::get('ads','AdsController@index');
 	Route::get('delivery/checker','AddressList@index');
@@ -40,8 +42,16 @@ Route::group(['namespace' => 'Api'], function(){
 
 	Route::get('cart', 'CartController@index');
 	Route::post('cart/remove-item', 'CartController@remove');
+	Route::post('cart/update/qty', 'CartController@update_qty');
+	Route::get('cart/add', 'CartController@add');
+
 	Route::get('address-list', 'AddressList@index');
 	Route::get('address-list/barangay', 'AddressList@barangay');
 	Route::get('address-list/municipality', 'AddressList@municipality');
 	Route::get('address-list/province', 'AddressList@province');
+
+	Route::get('order/gen', 'OrderController@order_no_gen');
+	Route::get('order/cancel/gen', 'OrderController@cancel_order_gen_no');
+	Route::get('order/status', 'OrderController@status');
+	Route::post('order/cancel', 'OrderController@cancel_order');
 });
