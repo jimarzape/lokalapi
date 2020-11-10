@@ -10,6 +10,11 @@ function cancel_number()
 	return 'LKL-CNL-'.rand_num(2).time().rand_num();
 }
 
+function seller_number()
+{
+	return 'SN-'.rand_num(2).time().rand_num();
+}
+
 function rand_char()
 {
 	$permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';

@@ -44,6 +44,7 @@ Route::group(['namespace' => 'Api'], function(){
 	Route::post('cart/remove-item', 'CartController@remove');
 	Route::post('cart/update/qty', 'CartController@update_qty');
 	Route::get('cart/add', 'CartController@add');
+	Route::get('cart/weight', 'CartController@weight');
 
 	Route::get('address-list', 'AddressList@index');
 	Route::get('address-list/barangay', 'AddressList@barangay');
@@ -54,4 +55,6 @@ Route::group(['namespace' => 'Api'], function(){
 	Route::get('order/cancel/gen', 'OrderController@cancel_order_gen_no');
 	Route::get('order/status', 'OrderController@status');
 	Route::post('order/cancel', 'OrderController@cancel_order');
+	Route::get('order/cancel/list', 'OrderController@cancel_list');
+	Route::post('order/checkout', 'OrderController@checkout');
 });

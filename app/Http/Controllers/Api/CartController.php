@@ -192,4 +192,23 @@ class CartController extends Controller
         }
 
     }
+
+    public function weight(Request $request)
+    {
+        $data = Cart::leftjoin('products','products.product_id','cart.product_id')
+                    ->leftjoin('brands','brands.brand_id','products.brand_id')
+                    ->leftjoin('stocks',function($join){
+                        $join->where('stocks.product_id','products.product_id');
+                        $join->where('stocks.stocks_size','cart.size');
+                    })
+                    ->leftjoin('sellers','sellers.id','products.seller_id')
+                    ->selectRaw('(cart.quantity * stocks.stocks_price) as `subtotal`, products.*, brands.*, cart.*, stocks.stocks_weight, stocks.stocks_price, sellers.*')
+                    ->where('cart.remove','false')
+                    ->where('cart.cart_paid','false')
+                    ->where('userToken', $request->user_token)
+                    ->orderBy('cart_time_stamp')
+                    ->get();
+
+        return response()->json($data);
+    }
 }

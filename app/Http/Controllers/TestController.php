@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use App\User;
+use App\Model\Cart;
 
 class TestController extends Controller
 {
@@ -31,6 +32,20 @@ class TestController extends Controller
     public function index()
     {
     	// dd(md5(1));
-        return order_number();
+        // return order_number();
+        $_cart = Cart::leftjoin('products','products.product_identifier','cart.product_identifier')
+                     ->leftjoin('users','users.userToken','cart.userToken')
+                     ->whereNull('cart.product_id')
+                     ->get();
+        foreach($_cart as $cart)
+        {
+            // dd($cart);
+            $update                 = new Cart;
+            $update->exists         = true;
+            $update->cart_id        = $cart->cart_id;
+            $update->product_id     = $cart->product_id;
+            $update->user_id        = $cart->userId;
+            $update->save();
+        }
     }
 }
