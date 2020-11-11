@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use DB;
 use App\User;
 use App\Model\Cart;
+use App\Mail\Test as TestEmail;
+use Illuminate\Support\Facades\Mail;
 
 class TestController extends Controller
 {
@@ -47,5 +49,13 @@ class TestController extends Controller
             $update->user_id        = $cart->userId;
             $update->save();
         }
+    }
+
+    public function email()
+    {
+        $params['from'] = 'order@lokaldatph.com';
+        Mail::to('jimarzape@gmail.com')->send(new TestEmail($params)); 
+
+        // return view('mails.order');
     }
 }
