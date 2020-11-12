@@ -7,5 +7,8 @@ use Illuminate\Http\Request;
 
 class NinjaVanController extends Controller
 {
-    //
+    public function check_fee(Request $request)
+    {
+
+    }
 }

@@ -57,4 +57,7 @@ Route::group(['namespace' => 'Api'], function(){
 	Route::post('order/cancel', 'OrderController@cancel_order');
 	Route::get('order/cancel/list', 'OrderController@cancel_list');
 	Route::post('order/checkout', 'OrderController@checkout');
+	Route::get('order/order_status/{status}', 'OrderController@order_status');
+
+	Route::post('fee/mrspeedy', 'DeliveryFeeChecker@mr_speedy');
 });
