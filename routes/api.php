@@ -61,4 +61,8 @@ Route::group(['namespace' => 'Api'], function(){
 
 	Route::post('fee/mrspeedy', 'DeliveryFeeChecker@mr_speedy');
 	Route::post('fee/ninjavan', 'DeliveryFeeChecker@ninjavan');
+
+	Route::post('followers', 'FollowerController@index');
+	Route::post('followers/follow', 'FollowerController@follow');
+	Route::post('followers/check', 'FollowerController@check');
 });
