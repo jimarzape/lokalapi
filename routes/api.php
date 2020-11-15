@@ -60,4 +60,5 @@ Route::group(['namespace' => 'Api'], function(){
 	Route::get('order/order_status/{status}', 'OrderController@order_status');
 
 	Route::post('fee/mrspeedy', 'DeliveryFeeChecker@mr_speedy');
+	Route::post('fee/ninjavan', 'DeliveryFeeChecker@ninjavan');
 });
