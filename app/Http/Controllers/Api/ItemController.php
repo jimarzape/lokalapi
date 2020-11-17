@@ -8,6 +8,7 @@ use App\Model\ProductModel;
 use App\Model\StockModel;
 use App\Model\ItemRating;
 use App\Model\Cart;
+use App\Model\WishModel;
 use App\User;
 
 class ItemController extends Controller
@@ -135,5 +136,87 @@ class ItemController extends Controller
                 
             }
         }
+    }
+
+    public function rate_list(Request $request)
+    {
+        try
+        {
+            $data = ItemRating::leftjoin('users','users.userId','item_rating.user_id')
+                              ->selectRaw('item_rating.*, IFNULL(users.userFullName,"Anonymous") as user_full_name')
+                              ->where('item_rating.product_identifier', $request->product_identifier)
+                              ->orderBy('created_at','desc')
+                              ->get();
+            return response()->json($data);
+        }
+        catch(\Exception $e)
+        {
+            $return['message'] = $e->getMessage();
+            return response()->json($return, 500);
+        }
+    }
+
+    public function wish_list(Request $request)
+    {
+        try
+        {
+            $data = ProductModel::generic()->leftjoin('wishlist','wishlist.product_identifier','products.product_identifier')
+                                 ->where('wishlist.user_token', $request->user_token)
+                                 ->orderBy('products.product_name')
+                                 ->get();
+            return response()->json($data, 200, [], JSON_NUMERIC_CHECK);    
+        }
+        catch(\Exception $e)
+        {
+            return 'ERROR';
+        }
+    }
+
+    public function remove_wish(Request $request)
+    {
+        try
+        {
+            WishModel::where('user_token', $request->user_token)->where('product_identifier', $request->product_identifier)->delete();
+            return 'Item has been removed from your wishlist.';
+        }
+        catch(\Exception $e)
+        {
+            return 'An error occurred while removing this item from your wishlist.\nCheck your internet connection.';
+        }
+        
+    }
+
+    public function add_wish(Request $request)
+    {   
+        try
+        {
+            $product = ProductModel::where('product_identifier', $request->product_identifier)->first();
+            if(!is_null($product))
+            {
+                $check = WishModel::where('user_token', $request->user_token)->where('product_identifier', $request->product_identifier)->first();
+                if(is_null($check))
+                {
+                    $wish                       = new WishModel;
+                    $wish->product_identifier   = $request->product_identifier;
+                    $wish->product_id           = $product->product_id;
+                    $wish->user_token           = $request->user_token;
+                    $wish->save();
+                    return 'SUCCESS';
+                }
+                else
+                {
+                    return 'This item is already in your wishlist.';
+                }
+            }   
+            else
+            {
+                return 'ERROR';
+            }
+        }
+        catch(\Exception $e)
+        {
+            return 'ERROR';
+        }
+        
     }
 }

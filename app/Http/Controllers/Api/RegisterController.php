@@ -22,12 +22,14 @@ class RegisterController extends Controller
 		    $checker_token = User::where('userToken',$request->userToken)->exists();
 		    if($checker_email)
 		    {
-		    	return response()->json(array('message' => 'Email already exists'), 422);
+		    	// return response()->json(array('message' => 'Email already exists'), 422);
+		    	return 0;
 		    }
 
 		    if($checker_email)
 		    {
-		    	return response()->json(array('message' => 'User Token already exists'), 422);
+		    	// return response()->json(array('message' => 'User Token already exists'), 422);
+		    	return 0;
 		    }
 
     		$user = new User;
@@ -49,11 +51,13 @@ class RegisterController extends Controller
 			$user->login_id 			= '';
 			$user->save();
 
-			return response()->json(array('message' => 'success'), 200);
+			// return response()->json(array('message' => 'success'), 200);
+			return 1;
     	}
     	catch(\Exception $e)
     	{
-    		return response()->json(array('message' => $e->getMessage()), 500);
+    		// return response()->json(array('message' => $e->getMessage()), 500);
+    		return 0;
     	}
     	
     }

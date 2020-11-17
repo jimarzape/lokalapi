@@ -25,11 +25,19 @@ Route::group(['namespace' => 'Api'], function(){
 	Route::get('auth/email-checker','AuthController@email_checker');
 	Route::post('auth/logout','AuthController@logout');
 	Route::get('auth/session-checker','AuthController@session_checker');
+	Route::get('auth/reset-email','AuthController@password_email_reset');
+	Route::get('auth/login-id','AuthController@login_id');
+	Route::get('auth/check-login','AuthController@check_login');
+	Route::post('auth/passwrod/reset','AuthController@update_password');
 
 	Route::get('item/search','ItemController@search');
 	Route::get('item/new-arrivals','ItemController@new_arrivals');
 	Route::get('item/random-list','ItemController@list_random');
 	Route::post('item/variant','ItemController@variant');
+	Route::get('item/rating','ItemController@rate_list');
+	Route::post('item/wish-list','ItemController@wish_list');
+	Route::post('item/wish/remove','ItemController@remove_wish');
+	Route::post('item/wish/add','ItemController@add_wish');
 
 	Route::post('order/rate','ItemController@rate');
 	
@@ -45,6 +53,7 @@ Route::group(['namespace' => 'Api'], function(){
 	Route::post('cart/update/qty', 'CartController@update_qty');
 	Route::get('cart/add', 'CartController@add');
 	Route::get('cart/weight', 'CartController@weight');
+	Route::get('cart/seller', 'CartController@seller');
 
 	Route::get('address-list', 'AddressList@index');
 	Route::get('address-list/barangay', 'AddressList@barangay');
@@ -65,4 +74,13 @@ Route::group(['namespace' => 'Api'], function(){
 	Route::post('followers', 'FollowerController@index');
 	Route::post('followers/follow', 'FollowerController@follow');
 	Route::post('followers/check', 'FollowerController@check');
+	Route::post('followers/user', 'FollowerController@user');
+
+	Route::post('paymongo/source', 'PaymongoController@source');
+	Route::get('paymongo/status', 'PaymongoController@status')->name('payment_status');
+	Route::get('paymongo/intent', 'PaymongoController@payment_intent');
+	Route::post('paymongo/method', 'PaymongoController@method');
+
+	Route::get('messages', 'MessageController@list');
+	Route::get('messages/delete', 'MessageController@destroy');
 });

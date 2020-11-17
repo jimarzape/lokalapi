@@ -211,4 +211,50 @@ class CartController extends Controller
 
         return response()->json($data);
     }
+
+    public function seller(Request $request)
+    {
+        $_data = Cart::leftjoin('products','products.product_id','cart.product_id')
+                    ->leftjoin('sellers','sellers.id','products.seller_id')
+                    ->leftjoin('refprovince','refprovince.provCode','sellers.province')
+                    ->leftjoin('refcitymun','refcitymun.citymunCode','sellers.city')
+                    ->leftjoin('refbrgy','refbrgy.brgyCode','sellers.brgy')
+                    ->where('cart.userToken', $request->user_token)
+                    ->where('cart.remove','false')
+                    ->where('cart.cart_paid','false')
+                    ->select(
+                        'sellers.id',
+                        'sellers.name as owner_name',
+                        'sellers.contact_num as owner_contact_number',
+                        'sellers.street_address as owner_street_address',
+                        'refprovince.provDesc as owner_province',
+                        'refcitymun.citymunDesc as owner_city',
+                        'refbrgy.brgyDesc as owner_area',
+                        'sellers.street_address as owner_map_address',
+                        'sellers.email as owner_email_address',
+                        'sellers.password as owner_password'
+                    )
+                    // ->groupBy('sellers.id')
+                    ->get()->toArray();
+        $arr = array();
+        foreach($_data as $data)
+        {
+            try
+            {
+                $collect = collect($arr);
+                $test = $collect->where('id', $data['id'])->first();
+                
+                if(is_null($test))
+                {
+                    array_push($arr, $data);
+                }
+            }
+            catch(\Exception $e)
+            {
+                array_push($arr, $data);
+            }
+        }
+
+        return response()->json($arr);
+    }
 }

@@ -73,4 +73,18 @@ class FollowerController extends Controller
 
     	return response()->json($data);
     }
+
+    public function user(Request $request)
+    {
+        try
+        {
+            $data[]['user_following'] = FollowingModel::where('user_token', $request->user_token)->where('is_following','true')->count();
+            return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
+        }
+        catch(\Exception $e)
+        {
+            $message= array('message' => array('code' => 'error'));
+            return response()->json($message, 500);
+        }
+    }
 }

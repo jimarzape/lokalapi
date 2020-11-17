@@ -90,4 +90,64 @@ class AuthController extends Controller
         }
     }
 
+    public function password_email_reset(Request $request)
+    {
+        // $request->email
+        $code = mt_rand(100000,999999);
+    }
+
+    public function update_password(Request $request)
+    {
+        $password = bcrypt($request->new_password);
+        $user = User::where('userEmail', $request->email)->first();
+        if(!is_null($user))
+        {
+            $update = new User;
+            $update->exists = true;
+            $update->userId = $user->userId;
+            $update->password = $password;
+            $update->save();
+        }
+    }
+
+    public function login_id(Request $request)
+    {
+        try
+        {
+            $user = User::where('userToken', $request->user_token)->first();
+            if(is_null($user))
+            {
+                return '';
+            }
+            else
+            {
+                return $user->login_id;
+            }
+        }
+        catch(\Exception $e)
+        {
+            return '';
+        }
+    }
+
+    public function check_login(Request $request)
+    {
+        try
+        {
+            $user = User::selectRaw("IFNULL(currently_logged_in,'false') as 'status'")->where('userEmail', $request->user_email)->first();
+            if(is_null($user))
+            {
+                return 'false';
+            }
+            else
+            {
+                return $user->status;
+            }
+        }
+        catch(\Exception $e)
+        {
+            return 'false';
+        }
+    }
+
 }
