@@ -16,7 +16,7 @@ class TestController extends Controller
 {
     public function index()
     {
-    	$_user = User::select('*',DB::raw('AES_DECRYPT(userPassword,userToken) as decrypted_pass'))->where('password','')->get();
+    	$_user = User::select('*',DB::raw('AES_DECRYPT(userPassword,userToken) as decrypted_pass'))->whereNull('password')->get();
         // dd($_user);
     	foreach($_user as $user)
     	{
