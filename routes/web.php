@@ -17,4 +17,5 @@ Route::get('/', function () {
 
 
 Route::get('test','TestController@index');
+Route::get('test/product','TestController@product');
 Route::get('test/email','TestController@email');
